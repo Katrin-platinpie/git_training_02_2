@@ -1,7 +1,15 @@
 const drawSquare = (x, y, color) => {
-  // to Do
+  ctx.fillStyle = color;
+  ctx.fillRect(x * square, y * square, square, square);
+
+  ctx.strokeStyle = "grey";
+  ctx.strokeRect(x * square, y * square, square, square);
 };
 
 const drawBoard = () => {
-  // to Do
+  for (let row = 0; row < _ROW; row++) {
+    for (let col = 0; col < _COL; col++) {
+      drawSquare(col, row, board[row][col]);
+    }
+  }
 };
