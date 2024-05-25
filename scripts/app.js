@@ -5,7 +5,15 @@ const highScoreboard = document.getElementById("high-score");
 const button = document.querySelector(".button");
 
 document.addEventListener("keydown", e => {
-
+  if (e.keyCode == 37) {
+    piece.moveRight();
+  } else if (e.keyCode == 38) {
+    piece.rotate();
+  } else if (e.keyCode == 39) {
+    piece.moveLeft();
+  } else if (e.keyCode == 40) {
+    piece.moveDown();
+  }
 });
 
 const _ROW = 20;
@@ -37,7 +45,7 @@ for (let row = 0; row < _ROW; row++) {
 }
 
 button.addEventListener("click", e => {
-  // to Do
+  window.location.reload();
 });
 
 const randomTetromino = () => {
@@ -51,7 +59,19 @@ const newPiece = () => {
 };
 
 const lockTetromino = () => {
-  // to Do
+  for (let i = 0; i < piece.activeTetromino.length; i++) {
+    for (let j = 0; j < piece.activeTetromino.length; j++) {
+      if (!piece.activeTetromino[i][j]) {
+        continue;
+      }
+      if (piece.y + i < 0) {
+        alert("Game Over");
+        gameOver = true;
+        break;
+      }
+      board[piece.y + i][piece.x + j] = piece.color;
+    }
+  }
 };
 
 let dropStart = Date.now();
