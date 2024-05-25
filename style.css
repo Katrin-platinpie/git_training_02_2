@@ -30,3 +30,7 @@ button {
   height: 100px;
 }
 
+.main {
+  position: relative;
+}
+
