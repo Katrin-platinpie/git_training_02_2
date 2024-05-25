@@ -34,3 +34,13 @@ button {
   position: relative;
 }
 
+.scores {
+  display: inline-block;
+  position: absolute;
+  top: 120px;
+  margin-left: 70px;
+}
+
+.play-again {
+  margin: 20px 0;
+}
