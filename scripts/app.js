@@ -5,7 +5,15 @@ const highScoreboard = document.getElementById("high-score");
 const button = document.querySelector(".button");
 
 document.addEventListener("keydown", e => {
-
+  if (e.keyCode == 37) { //37 is left-key
+    piece.moveLeft();
+  } else if (e.keyCode == 38) { //38 is up-key
+    piece.rotate();
+  } else if (e.keyCode == 39) { //39 is right-key
+    piece.moveRight();
+  } else if (e.keyCode == 40) { //40 is down-key
+    piece.moveDown();
+  }
 });
 
 const _ROW = 20;
@@ -37,26 +45,80 @@ for (let row = 0; row < _ROW; row++) {
 }
 
 button.addEventListener("click", e => {
-  // to Do
+  // to Do!
 });
 
 const randomTetromino = () => {
-  //to Do
+  let randomNum = Math.floor(Math.random() * _PIECES.length);
+  return new Tetromino(_PIECES[randomNum][0], _PIECES[randomNum][1]);
 };
 
 piece = randomTetromino();
 
 const newPiece = () => {
-  // to Do
+  piece = randomTetromino();
 };
 
 const lockTetromino = () => {
-  // to Do
+  for (let i = 0; i < piece.activeTetromino.length; i++) {
+    for (let j = 0; j < piece.activeTetromino.length; j++) {
+      if (!piece.activeTetromino[i][j]) {
+        continue;
+      }
+      if (piece.y + i < 0) {
+        alert("Game Over");
+        gameOver = true;
+        break;
+      }
+      board[piece.y + i][piece.x + j] = piece.color;
+    }
+  }
+
+  for (let row = 0; row < _ROW; row++) {
+    isRowFull = true;
+    for (let col = 0; col < _COL; col++) {
+      isRowFull = isRowFull && board[row][col] != vacant;
+    }
+    if (isRowFull) {
+      for (let r = row; r > 0; r--) {
+        for (let col = 0; col < _COL; col++) {
+          board[r][col] = board[r - 1][col];
+        }
+      }
+      for (let j = 0; j < _COL; j++) {
+        board[0][j] = vacant;
+      }
+      score += 10;
+    }
+  }
+
+  drawBoard();
+  scoreboard.innerHTML = score;
 };
 
 let dropStart = Date.now();
 function drop() {
-  // to Do
+  let now = Date.now();
+  if (now - dropStart > 900) {
+    piece.moveDown();
+    if (piece.collision(0, 1, piece.activeTetromino)) {
+      lockTetromino();
+      newPiece();
+    }
+    dropStart = Date.now();
+  }
+  if (!gameOver) {
+    requestAnimationFrame(drop);
+  }
+
+  if (localStorage.getItem("tetrisHighScore") === null) {
+    localStorage.setItem("tetrisHighScore", 0);
+  }
+
+  if (score > highScore) {
+    localStorage.setItem("tetrisHighScore", score);
+  }
+  highScoreboard.innerHTML = highScore;
 }
 
 drawBoard();
